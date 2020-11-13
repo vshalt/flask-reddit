@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% if not current_user.is_anonymous and not current_user.is_confirmed %}
+  {% include 'macros/_confirm.html' %}
+{% endif %}
+{% if current_user.is_anonymous %}
+  {% include 'macros/_register.html' %}
+{% endif %}

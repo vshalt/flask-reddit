@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+    <title>Flask reddit</title>
+    {% endblock title %}
+    {% block script %}
+    {% endblock script %}
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main.home') }}">Home</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+            {% else %}
+            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        {% endif %}
+        </ul>
+    </nav>
+    {% if get_flashed_messages() %}
+    {% for message in get_flashed_messages() %}
+    <div> 
+    {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% block content %}
+    {% endblock content %}
+    
+</body>
+</html>

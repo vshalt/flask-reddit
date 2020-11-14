@@ -9,6 +9,7 @@ from app.auth.forms import (
     ChangeUsernameForm,
     RequestForgotPasswordForm,
     ConfirmForgotPasswordForm,
+    RequestChangeEmailForm,
 )
 from flask_login import login_user, login_required, logout_user, current_user
 from app.auth.emails import send_mail
@@ -111,15 +112,52 @@ def change_username():
 def request_forgot_password():
     form = RequestForgotPasswordForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data.lower())
+        user = User.query.filter_by(email=form.email.data.lower()).first()
         if user:
             token = user.generate_password_reset_token()
             send_mail(user.email, 'Reset password', 'auth/mail/reset_password_request', token=token, user=current_user)
-            flash('Email sent')
+            flash('Email sent, check mail')
+            return redirect(url_for('main.profile'))
         else:
             flash('Invalid email')
+    return render_template('auth/request_forgot_password.html', form=form)
 
-    return render_template('auth/reset_forgot_password.html')
-
+@auth_blueprint.route('/forgot-password/<token>', methods=['GET', 'POST'])
+def forgot_password(token):
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.home'))
+    form = ConfirmForgotPasswordForm()
+    if form.validate_on_submit():
+        if User.confirm_password_reset_token(token, form.password.data):
+            db.session.commit()
+            flash('Password updated login to continue')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('An error occurred')
+    return render_template('auth/forgot_password.html', form=form)
 
 # TODO change email    - generate_email_reset_token, confirm_email_reset_token
+@auth_blueprint.route('/change-email')
+@login_required
+def request_change_email():
+    form = RequestChangeEmailForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.password.data):
+            token = current_user.generate_email_reset_token(form.new_email.data.lower())
+            send_mail(form.new_email.data.lower(), 'Change email', 'auth/mail/change_email', token=token)
+            flash('Email sent, check mail to change email')
+            return redirect(url_for('main.profile'))
+        else:
+            flash('Check password and try again')
+    return render_template('auth/request_change_email.html', form=form)
+
+@auth_blueprint.route('/change-email/<token>')
+@login_required
+def change_email(token):
+    if current_user.confirm_email_reset_token(token):
+        db.session.commit()
+        flash('Email changed, login to continue')
+        return redirect(url_for('auth.login'))
+    else:
+        flash('An error occurred please try again later')
+        return redirect(url_for('main.profile'))

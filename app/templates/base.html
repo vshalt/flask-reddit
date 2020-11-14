@@ -14,7 +14,10 @@
         <ul>
             <li><a href="{{ url_for('main.home') }}">Home</a></li>
             {% if current_user.is_authenticated %}
+            {% block navbar %}
+            <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
             <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+            {% endblock navbar %}
             {% else %}
             <li><a href="{{ url_for('auth.register') }}">Register</a></li>
             <li><a href="{{ url_for('auth.login') }}">Login</a></li>

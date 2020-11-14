@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block navbar %}
+  <li><a href="{{ url_for('auth.change_username') }}">Change username</a></li>
+  <li><a href="{{ url_for('auth.change_password') }}">Change password</a></li>
+  <li><a href="{{ url_for('auth.request_change_email') }}">Change email</a></li>
+  <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+{% endblock navbar %}
+{% block content %}
+{% endblock content %}

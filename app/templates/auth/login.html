@@ -9,5 +9,7 @@
     {{ fields(form.remember_me) }}
     {{ form.submit() }}
 </form>
+<small><a href="{{ url_for('auth.request_forgot_password') }}">Forgot password?</a></small>
+<small><a href="{{ url_for('auth.register') }}">Register for an account</a></small>
 
 {% endblock content %}

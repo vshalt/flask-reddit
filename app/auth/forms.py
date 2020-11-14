@@ -52,6 +52,15 @@ class RequestForgotPasswordForm(FlaskForm):
             raise ValidationError('Email does not exist')
 
 class ConfirmForgotPasswordForm(FlaskForm):
-    password            = StringField('Password', validators=[DataRequired(), Length(min=8, max=20), EqualTo('confirm_password', message='Passwords must match')])
-    confirm_password    = StringField('Confirm password', validators=[DataRequired()])
+    password            = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20), EqualTo('confirm_password', message='Passwords must match')])
+    confirm_password    = PasswordField('Confirm password', validators=[DataRequired()])
     submit              = SubmitField('Change password')
+
+class RequestChangeEmailForm(FlaskForm):
+    new_email   = StringField('New email', validators=[DataRequired(), Email(), Length(min=1, max=64)])
+    password    = PasswordField('Password', validators=[DataRequired()])
+    submit     = SubmitField('Change email')
+
+    def validate_new_email(self, field):
+        if User.query.filter_by(email=field.data.lower()).first():
+            raise ValidationError('Email already exists')

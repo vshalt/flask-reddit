@@ -42,7 +42,7 @@ class User(db.Model, UserMixin):
             return True
 
     def generate_password_reset_token(self, expiration=3600):
-        s = Serializer(current_app.config('SECRET_KEY'), expires_in=expiration)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'reset': self.id}).decode('utf-8')
 
     @staticmethod
@@ -73,7 +73,7 @@ class User(db.Model, UserMixin):
         else:
             self.email = data.get('email')
             db.session.add(self)
-            return False
+            return True
 
     def change_password(self, new_password):
         self.password = new_password

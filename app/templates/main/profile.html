@@ -1,9 +1,24 @@
 {% extends 'base.html' %}
 {% block navbar %}
-  <li><a href="{{ url_for('auth.change_username') }}">Change username</a></li>
-  <li><a href="{{ url_for('auth.change_password') }}">Change password</a></li>
-  <li><a href="{{ url_for('auth.request_change_email') }}">Change email</a></li>
-  <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    <li class='nav-item'><a class='nav-link' href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit profile</a></li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          More...
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class='nav-link text-dark' href="{{ url_for('auth.change_username') }}">Change username</a>
+          <div class="dropdown-divider"></div>
+            <a class='nav-link text-dark' href="{{ url_for('auth.change_password') }}">Change password</a>
+          <div class="dropdown-divider"></div>
+            <a class='nav-link text-dark' href="{{ url_for('auth.request_change_email') }}">Change email</a>
+        </div>
+    </li>
+  <li class='nav-item'><a class='nav-link' href="{{ url_for('auth.logout') }}">Logout</a></li>
 {% endblock navbar %}
 {% block content %}
+<div>
+ <p>Name {{ user.name }}</p>
+ <p>Location {{ user.location }}</p>
+ <p>About me {{ user.about_me }}</p>
+</div>
 {% endblock content %}

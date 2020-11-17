@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    {% if current_user.id == post.author_id %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          More...
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class='nav-link text-dark' href="{{ url_for('post.update_post', title=post.title, name=community.name) }}">Edit post</a>
+          <div class="dropdown-divider"></div>
+            <a class='nav-link text-dark' href="{{ url_for('post.delete_post', title=post.title, name=community.name) }}">Delete post</a>
+        </div>
+    </li>
+    {% endif %}
+{% endblock navbar %}
+{% block content %}
+<h1>{{ community.name }}</h1>
+<p>{{ community.description }}</p>
+<a href="{{ url_for('post.upvote_post', name=community.name, title=post.title) }}">upvote</a>
+<a href="{{ url_for('post.downvote_post', name=community.name, title=post.title) }}">downvote</a>
+    <h3>{{ post.title }}</h3>
+    <p>{{ post_vote }}</p>
+    <p>u/{{ post.author.username }} on {{ post.timestamp.strftime("%m/%d/%Y") }}</p>
+    <p>{{ post.body }}</p>
+{% endblock content %}

@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% from 'macros/_fields.html' import fields %}
 {% block content %}
-<p>Hey {{ user.username }}, change your password</p>
-    <form method="POST">
+    <form method='POST'>
         {{ form.hidden_tag() }}
-        {{ fields(form.password) }}
-        {{ fields(form.new_password) }}
-        {{ fields(form.confirm_new_password) }}
+        {{ fields(form.name) }}
+        {{ fields(form.description) }}
         {{ form.submit(class='btn btn-primary') }}
     </form>
 {% endblock content %}

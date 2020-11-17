@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="jumbotron">
+    r/{{ community.name }}
+</div>
+{% for post in posts %}
+<a href="{{ url_for('post.get_post', name=community.name, title=post.title) }}">
+    <div class='jumbotron'>
+        <h3>{{ post.title }}</h3>
+        <p>u/{{ post.author.username }} on {{ post.timestamp }}</p>
+        <p> {{ post.body }}</p>
+    </div>
+</a>
+{% endfor %}
+{% endblock content %}

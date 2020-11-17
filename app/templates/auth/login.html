@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
 {% from 'macros/_fields.html' import fields %}
 {% block content %}
-<h1>Login</h1>
+<div class='container'>
+<div class='row'>
+<div class='m-auto col-md-4'>
+<h1 class='text-center'>Login</h1>
 <form action="" method="POST" accept-charset="utf-8">
     {{ form.hidden_tag() }}
     {{ fields(form.email) }}
     {{ fields(form.password) }}
-    {{ fields(form.remember_me) }}
-    {{ form.submit() }}
+    {{ fields(form.remember_me, remember=True) }}
+    {{ form.submit(class='btn btn-primary') }}
 </form>
+<div class='d-flex justify-content-between mt-3'>
 <small><a href="{{ url_for('auth.request_forgot_password') }}">Forgot password?</a></small>
 <small><a href="{{ url_for('auth.register') }}">Register for an account</a></small>
-
+</div>
+</div>
+</div>
+</div>
 {% endblock content %}

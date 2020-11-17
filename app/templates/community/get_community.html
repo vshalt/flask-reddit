@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    {% if not current_user.is_anonymous and current_user.id == community.user.id %}
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a></li>
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a></li>
+
+<li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          More...
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class='nav-link text-dark' href="{{ url_for('community.update_community', name=community.name) }}">Update community</a>
+          <div class="dropdown-divider"></div>
+        <a class='nav-link text-dark' href="{{ url_for('community.delete_community', name=community.name) }}">Delete community</a>
+        </div>
+      </li>
+
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% elif not current_user.is_anonymous %}
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a></li>
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a></li>
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% endif %}
+{% endblock navbar %}
+{% block content %}
+    <div class='jumbotron'>
+    <h2>Welcome to r/{{ community.name }}</h2>
+    <p>{{ community.description }}</p>
+</div>
+{% endblock content %}

@@ -5,7 +5,7 @@ from app.models import User
 
 class RegisterForm(FlaskForm):
     email               = StringField('Email', validators=[DataRequired(), Email(), Length(min=1, max=64)])
-    username            = StringField('Username', validators=[DataRequired(), Length(min=1, max=64), Regexp('^[a-zA-Z][a-zA-Z0-9_.]*$',flags=0, message="Username can only contain alphanumerical characters")])
+    username            = StringField('Username', validators=[DataRequired(), Length(min=1, max=64), Regexp('^[a-zA-Z][a-zA-Z0-9_]*$',flags=0, message="Username can only contain alphanumerical characters")])
     password            = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20), EqualTo('confirm_password', message="Passwords must match")])
     confirm_password    = PasswordField('Confirm Password', validators=[DataRequired()])
     submit              = SubmitField('Register')
@@ -35,7 +35,7 @@ class ChangePasswordForm(FlaskForm):
     submit                  = SubmitField('Change password')
 
 class ChangeUsernameForm(FlaskForm):
-    new_username    = StringField('Username', validators=[DataRequired(), Length(min=1, max=64), Regexp('^[a-zA-Z][a-zA-Z0-9_.]*$', flags=0, message='Username can only contain alphanumerical characters')])
+    new_username    = StringField('Username', validators=[DataRequired(), Length(min=1, max=64), Regexp('^[a-zA-Z][a-zA-Z0-9_]*$', flags=0, message='Username can only contain alphanumerical characters')])
     password        = PasswordField('Password', validators=[DataRequired()])
     submit          = SubmitField('Change username')
 

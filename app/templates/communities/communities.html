@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for community in communities %}
+    <a href="{{ url_for('community.get_community', name=community.name) }}">
+        <div class='jumbotron'>
+            <h3>r/{{ community.name }}</h3>
+            <p>{{ community.participants.count() }} participants</p>
+            <hr>
+            <p>{{ community.description }}</p>
+        </div>
+    </a>
+    {% endfor %}
+{% endblock content %}

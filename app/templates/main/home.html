@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
+{% block messages %}
 {% if not current_user.is_anonymous and not current_user.is_confirmed %}
+<div class='container'>
   {% include 'macros/_confirm.html' %}
+</div>
 {% endif %}
 {% if current_user.is_anonymous %}
+<div class='container'>
   {% include 'macros/_register.html' %}
+</div>
 {% endif %}
+{% endblock messages %}
+{% block content %}
+{% endblock content %}

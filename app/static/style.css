@@ -1,0 +1,23 @@
+*{
+    font-family: Helvetica, sans-serif;
+    box-sizing: border-box;
+}
+.full-height {
+  height: auto;
+  min-height: 80vh;
+}
+
+.fifth-height {
+  height: 10vh;
+}
+
+.link:hover {
+  opacity: 0.6;
+}
+.link{
+    text-decoration: underline;
+    font-weight: bold;
+}
+.eighty{
+    width: 80vw;
+}

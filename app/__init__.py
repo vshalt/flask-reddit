@@ -27,10 +27,12 @@ def create_app(config_name):
     from app.community import community_blueprint
     from app.communities import communities_blueprint
     from app.post import post_blueprint
+    from app.reply import reply_blueprint
 
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     app.register_blueprint(main_blueprint)
     app.register_blueprint(community_blueprint)
     app.register_blueprint(communities_blueprint)
     app.register_blueprint(post_blueprint)
+    app.register_blueprint(reply_blueprint)
     return app

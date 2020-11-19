@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, abort, flash
 from flask_login import current_user, login_required
 from app.post import post_blueprint
 from app import db
-from app.models import Community, Post, PostVote
+from app.models import Community, Post, PostVote, Reply, ReplyVote
 from app.post.forms import NewPostForm, UpdatePostForm
 
 @post_blueprint.route('/community/r/<string:name>/posts')
@@ -14,19 +14,24 @@ def get_posts(name):
     else:
         abort(404)
 
-
-
 @post_blueprint.route('/community/r/<string:name>/get/<string:title>')
 def get_post(name, title):
     community = Community.query.filter_by(name=name).first()
     if community:
         post = Post.query.filter_by(title=title).first()
         if post:
+            replies = Reply.query.filter_by(post_id=post.id)
             post_votes = PostVote.query.filter_by(post_id=post.id).all()
             sum = 0
             for post_vote in post_votes:
                 sum += post_vote.count
-            return render_template('post/get_post.html', post=post, community=community, post_vote=sum)
+            def get_votes(reply):
+                replies = ReplyVote.query.filter_by(reply_id=reply.id).all()
+                sum = 0
+                for reply in replies:
+                    sum += reply.count
+                return sum
+            return render_template('post/get_post.html', post=post, community=community, get_votes=get_votes,post_vote=sum, replies=replies, hide_view='yes')
         else:
             abort(404)
     else:

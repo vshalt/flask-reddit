@@ -26,5 +26,24 @@
     <div class='jumbotron'>
     <h2>Welcome to r/{{ community.name }}</h2>
     <p>{{ community.description }}</p>
+    <p>Created by <a href="{{ url_for('main.profile', username=community.user.username) }}">
+        u/{{ community.user.username }}
+    </a>
+    on {{ community.timestamp.strftime('%m/%d/%Y')}}
+    </p>
+    {% if join_or_leave(current_user, community) %}
+        <a class='btn btn-primary' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a>
+            {% else %}
+        <a class='btn btn-primary' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a>
+        {% endif %}
+        <a class='btn btn-primary' href="{{ url_for('main.home') }}">Home</a>
+</div>
+<div class='jumbotron'>
+    <h1>Participants</h1>
+    {% for participant in community.participants %}
+    <h4><img src="{{ participant.user.gravatar() }}"><a class='text-decoration-none' href="{{ url_for('main.profile', username=participant.user.username) }}">
+    u/{{ participant.user.username }}
+</a></h4>
+    {% endfor %}
 </div>
 {% endblock content %}

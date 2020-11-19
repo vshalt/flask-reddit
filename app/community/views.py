@@ -4,12 +4,13 @@ from app import db
 from app.models import Community, CommunityParticipant
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
+from app.communities.views import join_or_leave
 
 @community_blueprint.route('/community/r/<string:name>')
 def get_community(name):
     community = Community.query.filter_by(name=name).first()
     if community:
-        return render_template('community/get_community.html',community=community)
+        return render_template('community/get_community.html',community=community, join_or_leave=join_or_leave)
     else:
         abort(404)
 

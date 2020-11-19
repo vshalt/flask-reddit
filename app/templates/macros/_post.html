@@ -1,0 +1,41 @@
+<div class='jumbotron'>
+    <a href="{{ url_for('main.profile', username=post.author.username) }}">
+    <img src="{{ post.author.gravatar() }}">
+    </a>
+    <p>Posted by
+    <a href="{{ url_for('main.profile', username=post.author.username) }}">
+    u/{{ post.author.username }}
+    </a> in
+    <a href="{{ url_for('community.get_community', name=community.name) }}">r/{{ community.name }}</a> on {{ post.timestamp.strftime("%m/%d/%Y") }}</p>
+    </a>
+</p>
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.body }}</p>
+    <p class='font-match'>
+    {% if not current_user.is_authenticated %}
+    {{ post_vote }}
+    <a class='btn btn-primary' href="{{ url_for('auth.login') }}">Login to vote</a>
+    {% endif %}
+    {% if current_user.is_authenticated %}
+    {% if not hide_vote %}
+    <a href="{{ url_for('post.upvote_post', name=community.name, title=post.title) }}"><i class='fas fa-arrow-alt-circle-up'></i></a>
+    {% if not post_vote or post_vote == 0 %}
+        {{ 0 }}
+    {% else %}
+    {{ post_vote }}
+    {% endif %}
+    <a href="{{ url_for('post.downvote_post', name=community.name, title=post.title) }}"><i class='fas fa-arrow-alt-circle-down'></i></a>
+    {% endif %}
+    {% endif %}
+    </p>
+    {% if hide_view != 'yes' %}
+    <a class='btn btn-primary' href="{{ url_for('post.get_post', name=community.name, title=post.title) }}">View post</a>
+    {% endif %}
+    {% if current_user.is_authenticated %}
+    <a class='btn btn-primary' href="{{ url_for('reply.new_reply', name=community.name, title=post.title) }}">Reply</a>
+    {% endif %}
+{% if current_user.id == post.author.id %}
+    <a class='btn btn-primary' href="{{ url_for('post.update_post', name=community.name, title=post.title) }}">Update post</a>
+    <a class='btn btn-danger' href="{{ url_for('post.delete_post', name=community.name, title=post.title) }}">Delete post</a>
+{% endif %}
+</div>

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% from 'macros/_fields.html' import fields %}
+{% block content %}
+    <form method='POST'>
+        {{ form.hidden_tag() }}
+        {{ fields(form.body) }}
+        {{ form.submit(class='btn btn-primary')}}
+    </form>
+{% endblock content %}

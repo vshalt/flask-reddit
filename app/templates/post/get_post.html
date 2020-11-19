@@ -14,12 +14,8 @@
     {% endif %}
 {% endblock navbar %}
 {% block content %}
-<h1>{{ community.name }}</h1>
-<p>{{ community.description }}</p>
-<a href="{{ url_for('post.upvote_post', name=community.name, title=post.title) }}">upvote</a>
-<a href="{{ url_for('post.downvote_post', name=community.name, title=post.title) }}">downvote</a>
-    <h3>{{ post.title }}</h3>
-    <p>{{ post_vote }}</p>
-    <p>u/{{ post.author.username }} on {{ post.timestamp.strftime("%m/%d/%Y") }}</p>
-    <p>{{ post.body }}</p>
+{% include 'macros/_post.html' %}
+    {% for reply in replies %}
+        {% include 'macros/_reply.html' %}
+    {% endfor %}
 {% endblock content %}

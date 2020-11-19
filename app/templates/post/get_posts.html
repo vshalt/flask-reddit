@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="jumbotron">
-    r/{{ community.name }}
+    <h1>r/{{ community.name }}</h1>
+    {% if current_user.is_authenticated %}
+    <a class='btn btn-primary' href="{{ url_for('post.new_post', name=community.name) }}">New post</a>
+    {% endif %}
+    <a class='btn btn-primary' href="{{ url_for('community.get_community', name=community.name) }}">About r/{{ community.name }}</a>
 </div>
 {% for post in posts %}
-<a href="{{ url_for('post.get_post', name=community.name, title=post.title) }}">
-    <div class='jumbotron'>
-        <h3>{{ post.title }}</h3>
-        <p>u/{{ post.author.username }} on {{ post.timestamp }}</p>
-        <p> {{ post.body }}</p>
-    </div>
-</a>
+{% include 'macros/_post.html' %}
 {% endfor %}
 {% endblock content %}

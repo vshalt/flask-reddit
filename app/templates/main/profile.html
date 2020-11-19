@@ -16,9 +16,19 @@
   <li class='nav-item'><a class='nav-link' href="{{ url_for('auth.logout') }}">Logout</a></li>
 {% endblock navbar %}
 {% block content %}
-<div>
- <p>Name {{ user.name }}</p>
- <p>Location {{ user.location }}</p>
- <p>About me {{ user.about_me }}</p>
+<div class='jumbotron text-center'>
+  <img src='{{ user.gravatar(size=256) }}' />
+  <h4>u/{{ user.username }}</h4>
+  <h4>{{ user.email }}</h4>
+  {% if user.name %}
+ <h4>Name {{ user.name }}</h4>
+ {% endif %}
+  {% if user.location %}
+ <h4>Location {{ user.location }}</h4>
+ {% endif %}
+  {% if user.about_me %}
+ <h4>About me {{ user.about_me }}</h4>
+ {% endif %}
+ <a class='btn btn-primary' href="{{ url_for('main.edit_profile', username=user.username) }}">Edit profile</a>
 </div>
 {% endblock content %}

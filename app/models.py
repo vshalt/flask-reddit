@@ -3,8 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import login_manager
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
+from flask import current_app, request
 from datetime import datetime
+import hashlib
 
 class User(db.Model, UserMixin):
     __tablename__           = 'users'
@@ -18,6 +19,7 @@ class User(db.Model, UserMixin):
     about_me                = db.Column(db.String(256))
     member_since            = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen               = db.Column(db.DateTime, default=datetime.utcnow)
+    avatar_hash             = db.Column(db.String(32))
 
     communities             = db.relationship('Community', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     posts                   = db.relationship('Post', backref='author', lazy='dynamic', cascade='all, delete-orphan')
@@ -26,6 +28,16 @@ class User(db.Model, UserMixin):
     reply_votes             = db.relationship('ReplyVote', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     community_participants  = db.relationship('CommunityParticipant', backref='user', lazy='dynamic', cascade='all, delete-orphan')
 
+    def gravatar_hash(self):
+        return hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+
+    def gravatar(self, size=100, default='robohash', rating='g'):
+        if request.is_secure:
+            url = 'https://secure.gravatar.com/avatar'
+        else:
+            url = 'https://www.gravatar.com/avatar'
+        hash = self.avatar_hash or self.gravatar_hash()
+        return f'{url}/{hash}?s={size}&d={default}&r={rating}'
     @property
     def password(self):
         raise AttributeError('Password is not readable')
@@ -85,6 +97,7 @@ class User(db.Model, UserMixin):
             return False
         else:
             self.email = data.get('email')
+            self.avatar_hash = self.gravatar_hash()
             db.session.add(self)
             return True
 
@@ -123,7 +136,7 @@ class Community(db.Model):
     participants    = db.relationship('CommunityParticipant', backref='community', lazy='dynamic', cascade='all, delete-orphan')
 
     def __repr__(self):
-        return f'<Community: {self.name}'
+        return f'<Community: {self.name}>'
 
 
 class Post(db.Model):
@@ -158,7 +171,7 @@ class Reply(db.Model):
     reply_votes     = db.relationship('ReplyVote', backref='reply', lazy='dynamic', cascade='all, delete-orphan')
 
     def __repr__(self):
-        return f'<Reply: {self.body}'
+        return f'<Reply: {self.body}>'
 
 
 class PostVote(db.Model):

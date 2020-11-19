@@ -2,12 +2,23 @@ from app.main import main_blueprint
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import current_user, login_required
 from app.main.forms import EditProfileForm
-from app.models import User
+from app.models import User, CommunityParticipant, Post, Community
 from app import db
 
 @main_blueprint.route('/')
 def home():
-    return render_template('main/home.html')
+    if current_user.is_authenticated:
+        communities = CommunityParticipant.query.filter_by(user_id=current_user.id).all()
+        posts = []
+        for community in communities:
+            posts += Post.query.filter_by(community_id = community.community_id).all()
+    else:
+        posts = Post.query.all()
+    def find_community(xpost):
+        post_community = Post.query.filter_by(title=xpost.title).first()
+        community = Community.query.get(int(post_community.community_id))
+        return community
+    return render_template('main/home.html', posts=posts, find_community=find_community, hide_vote='yes')
 
 @main_blueprint.route('/profile/<username>')
 @login_required

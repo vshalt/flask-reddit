@@ -12,4 +12,13 @@
 {% endif %}
 {% endblock messages %}
 {% block content %}
+{% if posts %}
+    {% for post in posts %}
+    {% set community = find_community(post) %}
+        {% include 'macros/_post.html' %}
+    {% endfor %}
+{% else %}
+<h1 class='text-center'>Join some communties to view posts</h1>
+<p class='text-center'><a class='btn btn-primary' href="{{ url_for('communities.communities') }}">View communities</a></p>
+{% endif %}
 {% endblock content %}

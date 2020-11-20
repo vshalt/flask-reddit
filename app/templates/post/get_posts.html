@@ -2,10 +2,16 @@
 {% block content %}
 <div class="jumbotron">
     <h1>r/{{ community.name }}</h1>
+    {% if join_or_leave(current_user, community) %}
+        <a class='btn btn-danger' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a>
+            {% else %}
+        <a class='btn btn-success' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a>
+        {% endif %}
     {% if current_user.is_authenticated %}
     <a class='btn btn-primary' href="{{ url_for('post.new_post', name=community.name) }}">New post</a>
     {% endif %}
     <a class='btn btn-primary' href="{{ url_for('community.get_community', name=community.name) }}">About r/{{ community.name }}</a>
+        <a class='btn btn-primary' href="{{ url_for('main.home') }}">Home</a>
 </div>
 {% for post in posts %}
 {% include 'macros/_post.html' %}

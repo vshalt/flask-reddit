@@ -13,6 +13,7 @@
         {{ fields(form.confirm_password) }}
         {{ form.submit(class='btn btn-primary') }}
     </form>
+    <small><a href="{{ url_for('auth.login') }}">Already have an account?</a></small>
 </div>
 </div>
 </div>

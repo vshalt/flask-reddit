@@ -4,13 +4,14 @@ from app.post import post_blueprint
 from app import db
 from app.models import Community, Post, PostVote, Reply, ReplyVote
 from app.post.forms import NewPostForm, UpdatePostForm
+from app.communities.views import join_or_leave
 
 @post_blueprint.route('/community/r/<string:name>/posts')
 def get_posts(name):
     community = Community.query.filter_by(name=name).first()
     if community:
         posts = Post.query.filter_by(community=community).all()
-        return render_template('post/get_posts.html', posts=posts, community=community)
+        return render_template('post/get_posts.html', posts=posts, community=community, join_or_leave=join_or_leave)
     else:
         abort(404)
 

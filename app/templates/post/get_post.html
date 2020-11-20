@@ -12,6 +12,9 @@
         </div>
     </li>
     {% endif %}
+    {% if current_user.is_authenticated %}
+            <a class='nav-link text-dark' href="{{ url_for('auth.logout') }}">Logout</a>
+    {% endif %}
 {% endblock navbar %}
 {% block content %}
 {% include 'macros/_post.html' %}

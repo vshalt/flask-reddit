@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 from app.main.forms import EditProfileForm
 from app.models import User, CommunityParticipant, Post, Community
 from app import db
+from app.communities.views import join_or_leave
 
 @main_blueprint.route('/')
 def home():
@@ -25,7 +26,7 @@ def home():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     if user:
-        return render_template('main/profile.html', user=user)
+        return render_template('main/profile.html', user=user, join_or_leave=join_or_leave)
     else:
         abort(404)
 

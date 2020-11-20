@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% block navbar %}
     {% if not current_user.is_anonymous and current_user.id == community.user.id %}
-        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a></li>
+    {% if join_or_leave(current_user, community) %}
         <li class='nav-item'><a class='nav-link' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a></li>
-
+            {% else %}
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a></li>
+        {% endif %}
 <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          More...
+          More <i class='fas fa-chevron-circle-down'></i>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class='nav-link text-dark' href="{{ url_for('community.update_community', name=community.name) }}">Update community</a>
@@ -16,9 +18,12 @@
       </li>
 
         <li class='nav-item'><a class='nav-link' href="{{ url_for('auth.logout') }}">Logout</a></li>
-    {% elif not current_user.is_anonymous %}
-        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a></li>
+    {% elif current_user.is_authenticated %}
+    {% if join_or_leave(current_user, community) %}
         <li class='nav-item'><a class='nav-link' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a></li>
+            {% else %}
+        <li class='nav-item'><a class='nav-link' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a></li>
+        {% endif %}
         <li class='nav-item'><a class='nav-link' href="{{ url_for('auth.logout') }}">Logout</a></li>
     {% endif %}
 {% endblock navbar %}
@@ -32,16 +37,19 @@
     on {{ community.timestamp.strftime('%m/%d/%Y')}}
     </p>
     {% if join_or_leave(current_user, community) %}
-        <a class='btn btn-primary' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a>
+        <a class='btn btn-danger' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a>
             {% else %}
-        <a class='btn btn-primary' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a>
+        <a class='btn btn-success' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a>
         {% endif %}
+    {% if current_user.is_authenticated %}
+        <a class='btn btn-primary' href="{{ url_for('post.new_post', name=community.name) }}">New Post</a>
+    {% endif %}
         <a class='btn btn-primary' href="{{ url_for('main.home') }}">Home</a>
 </div>
 <div class='jumbotron'>
     <h1>Participants</h1>
     {% for participant in community.participants %}
-    <h4><img src="{{ participant.user.gravatar() }}"><a class='text-decoration-none' href="{{ url_for('main.profile', username=participant.user.username) }}">
+    <h4 class='img'><img src="{{ participant.user.gravatar() }}"><a class='text-decoration-none' href="{{ url_for('main.profile', username=participant.user.username) }}">
     u/{{ participant.user.username }}
 </a></h4>
     {% endfor %}

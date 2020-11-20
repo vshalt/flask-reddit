@@ -1,22 +1,20 @@
 {% extends 'base.html' %}
 {% block navbar %}
-    <li class='nav-item'><a class='nav-link' href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit profile</a></li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          More...
+          More <i class='fas fa-chevron-circle-down'></i>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class='nav-link text-dark' href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit profile</a>
             <a class='nav-link text-dark' href="{{ url_for('auth.change_username') }}">Change username</a>
-          <div class="dropdown-divider"></div>
             <a class='nav-link text-dark' href="{{ url_for('auth.change_password') }}">Change password</a>
-          <div class="dropdown-divider"></div>
             <a class='nav-link text-dark' href="{{ url_for('auth.request_change_email') }}">Change email</a>
         </div>
     </li>
   <li class='nav-item'><a class='nav-link' href="{{ url_for('auth.logout') }}">Logout</a></li>
 {% endblock navbar %}
 {% block content %}
-<div class='jumbotron text-center'>
+<div class='img jumbotron text-center'>
   <img src='{{ user.gravatar(size=256) }}' />
   <h4>u/{{ user.username }}</h4>
   <h4>{{ user.email }}</h4>
@@ -29,6 +27,36 @@
   {% if user.about_me %}
  <h4>About me {{ user.about_me }}</h4>
  {% endif %}
+ {% if current_user.id == user.id %}
  <a class='btn btn-primary' href="{{ url_for('main.edit_profile', username=user.username) }}">Edit profile</a>
+ {% endif %}
+ <a class='btn btn-primary' href="#community">Communities</a>
+ <a class='btn btn-primary' href="#posts">Posts</a>
 </div>
+<h2 id='community'>Communities</h2>
+  {% for community in user.communities %}
+  <div class='jumbotron'>
+  <a href="url_for('community.get_community', name=community.name) }}">
+    <h2> r/{{ community.name }}</h2>
+    <p>{{ community.description }}</p>
+    <p>Created by <a href="{{ url_for('main.profile', username=community.user.username) }}">
+        u/{{ community.user.username }}
+    </a>
+    on {{ community.timestamp.strftime('%m/%d/%Y')}}
+    </p>
+  </a>
+    {% if join_or_leave(current_user, community) %}
+        <a class='btn btn-danger' href="{{ url_for('community.leave_community', name=community.name) }}">Leave community</a>
+            {% else %}
+        <a class='btn btn-success' href="{{ url_for('community.join_community', name=community.name) }}">Join community</a>
+        {% endif %}
+        <a class='btn btn-primary' href="{{ url_for('main.home') }}">Home</a>
+  </div>
+  {% endfor %}
+
+<h2 id='posts'>Posts by u/{{ user.username }}</h2>
+{% for post in user.posts %}
+{% set community=post.community %}
+{% include 'macros/_post.html' %}
+{% endfor %}
 {% endblock content %}

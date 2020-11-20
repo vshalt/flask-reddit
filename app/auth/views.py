@@ -23,7 +23,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_mail(user.email, 'Test', 'auth/mail/confirm_email', token=token, user=current_user)
+        send_mail(user.email, 'Flask reddit', 'auth/mail/confirm_email', token=token, user=current_user)
         flash('Account created login to continue', 'primary')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)

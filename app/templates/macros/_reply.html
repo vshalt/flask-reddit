@@ -1,5 +1,5 @@
     <div class='jumbotron'>
-        <a href="{{ url_for('main.profile', username=reply.author.username) }}">
+        <a class='img' href="{{ url_for('main.profile', username=reply.author.username) }}">
         <img src="{{ reply.author.gravatar() }}">
         <p>
         u/{{ reply.author.username }}</a> replied in <a href="{{ url_for('community.get_community', name=community.name) }}">r/{{ community.name }}</a> on {{ reply.timestamp.strftime('%m/%d/%Y') }}
@@ -16,6 +16,6 @@
     </p>
         {% if reply.author.id == current_user.id %}
         <a class='btn btn-primary' href="{{ url_for('reply.edit_reply', name=community.name, title=post.title, reply_id=reply.id) }}">Edit</a>
-        <a class='btn btn-primary' href="{{ url_for('reply.delete_reply', name=community.name, title=post.title, reply_id=reply.id) }}">Delete</a>
+        <a class='btn btn-danger' href="{{ url_for('reply.delete_reply', name=community.name, title=post.title, reply_id=reply.id) }}">Delete</a>
         {% endif %}
     </div>

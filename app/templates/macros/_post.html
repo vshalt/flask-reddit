@@ -1,5 +1,5 @@
 <div class='jumbotron'>
-    <a href="{{ url_for('main.profile', username=post.author.username) }}">
+    <a class='img' href="{{ url_for('main.profile', username=post.author.username) }}">
     <img src="{{ post.author.gravatar() }}">
     </a>
     <p>Posted by

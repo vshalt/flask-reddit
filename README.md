@@ -2,6 +2,7 @@
 
 ![flask-reddit](./img/logo.png)
 
+Try here: https://reddit-flask.herokuapp.com
 > A reddit app made with flask.
 > Drop a star if you like this project :P
 ---
